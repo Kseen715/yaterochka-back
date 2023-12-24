@@ -15,19 +15,8 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
-    execute_from_command_line(sys.argv[:2])
+    execute_from_command_line(sys.argv)
 
 
 if __name__ == '__main__':
-    # run this command in terminal:
-    params = sys.argv[1:]
-    print(sys.argv[:2])
-    try:
-        # remove file if exists
-        os.remove('db.conf')
-    except:
-        pass
-    with open('db.conf', 'w') as f:
-        f.write('\n'.join(params))
-
     main()

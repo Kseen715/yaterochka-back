@@ -10,22 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 import psycopg2
 import colorama as cl
-
-
-def read_conf_as_json():
-    with open('./db.conf', 'r') as f:
-        params = f.readlines()
-    params = [param.split(sep='=') for param in params]
-    params = [[par.replace('\n', '') for par in param] for param in params]
-    params = [param for param in params if len(param) == 2]
-    params = {param[0]: param[1] for param in params}
-    print(cl.Fore.GREEN + 'Параметры подключения к БД: ', end='')
-    print(params, end='')
-    print(cl.Style.RESET_ALL)
-    return params
+import mimetypes
+mimetypes.add_type("text/css", ".css", True)
+mimetypes.add_type("text/html", ".css", True)
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -90,7 +81,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'djangoProject.wsgi.application'
 
-conf = read_conf_as_json()
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -98,14 +88,18 @@ conf = read_conf_as_json()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': conf['NAME'],
-        'HOST': conf['HOST'],
-        'PORT': conf['PORT'],
-        'PASSWORD': conf['PASSWORD'],
-        'USER': conf['USER'],
+        'NAME': os.environ.get('NAME'),
+        'HOST': os.environ.get('HOST'),
+        'PORT': os.environ.get('PORT'),
+        'PASSWORD': os.environ.get('PASSWORD'),
+        'USER': os.environ.get('USER'),
 
     }
 }
+
+print(cl.Fore.GREEN + 'Параметры подключения к БД: ', end='')
+print(DATABASES['default'], end='')
+print(cl.Style.RESET_ALL)
 
 
 # Password validation
@@ -154,11 +148,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #     'PAGE_SIZE': 3
 # }
 
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://localhost",
 ]
-CORS_ALLOW_HEADERS = ['*']
-CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
+CORS_ALLOW_HEADERS = \
+    ['Access-Control-Allow-Origin',
+     'Access-Control-Allow-Credentials',
+     'headers',
+     'content-type',
+     'x-csrftoken',]
+CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT',
+                      'DELETE', 'OPTIONS', 'PATCH', 'UPDATE', 'DESTROY']
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://localhost',
+]
