@@ -1,3 +1,4 @@
+from djangoProject.settings import ERR_LINK
 from io import BytesIO
 import pandas as pd
 from django.http import JsonResponse, HttpResponse
@@ -7,10 +8,24 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, I
 from django.contrib.admin.views.decorators import staff_member_required
 from .permission import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from .serializers import *
+from django.contrib.auth.decorators import permission_required
+from rest_framework.views import APIView
+from django.contrib.auth import logout
+from django.http import HttpResponseRedirect
 
 methods = ['get', 'post', 'head',
            'put', 'patch', 'delete', 'update', 'destroy']
 
+
+class UserStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({'is_authenticated': request.user.is_authenticated})
+
+# def logout_view(request):
+#     logout(request)
+#     return HttpResponseRedirect("http://www.example.com")
 
 class ProductAPIList(viewsets.ModelViewSet):
     http_method_names = methods
@@ -101,31 +116,31 @@ def create_json(data, name):
     return response
 
 
-@staff_member_required
+@permission_required('app_name.change_product', login_url=ERR_LINK)
 def get_data_as_json_product(request):
     data = Product.objects.all().values()
     return create_json(data, 'product.json')
 
 
-@staff_member_required
+@permission_required('app_name.change_product', login_url=ERR_LINK)
 def get_data_as_json_store(request):
     data = Store.objects.all().values()
     return create_json(data, 'store.json')
 
 
-@staff_member_required
+@permission_required('app_name.change_product', login_url=ERR_LINK)
 def get_data_as_json_group(request):
     data = Groupp.objects.all().values()
     return create_json(data, 'group.json')
 
 
-@staff_member_required
+@permission_required('app_name.change_product', login_url=ERR_LINK)
 def get_data_as_json_employee(request):
     data = Employee.objects.all().values()
     return create_json(data, 'employee.json')
 
 
-@staff_member_required
+@permission_required('app_name.change_product', login_url=ERR_LINK)
 def get_data_as_json_check(request):
     data = Chek.objects.all().values()
     return create_json(data, 'check.json')
@@ -140,31 +155,31 @@ def create_csv(data, name):
     return response
 
 
-@staff_member_required
+@permission_required('app_name.change_product', login_url=ERR_LINK)
 def get_data_as_csv_product(request):
     data = Product.objects.all().values()
     return create_csv(data, 'product.csv')
 
 
-@staff_member_required
+@permission_required('app_name.change_product', login_url=ERR_LINK)
 def get_data_as_csv_check(request):
     data = Chek.objects.all().values()
     return create_csv(data, 'check.csv')
 
 
-@staff_member_required
+@permission_required('app_name.change_product', login_url=ERR_LINK)
 def get_data_as_csv_group(request):
     data = Groupp.objects.all().values()
     return create_csv(data, 'group.csv')
 
 
-@staff_member_required
+@permission_required('app_name.change_product', login_url=ERR_LINK)
 def get_data_as_csv_employee(request):
     data = Employee.objects.all().values()
     return create_csv(data, 'employee.csv')
 
 
-@staff_member_required
+@permission_required('app_name.change_product', login_url=ERR_LINK)
 def get_data_as_csv_store(request):
     data = Store.objects.all().values()
     return create_csv(data, 'store.csv')

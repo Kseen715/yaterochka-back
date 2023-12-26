@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
+from django.views.generic import RedirectView
 
 from meow.views import *
 
@@ -38,4 +39,7 @@ urlpatterns = [
     path('get-csv-data/sel/check/', get_data_as_csv_check),
     path('get-csv-data/sel/employee/', get_data_as_csv_employee),
     path('get-csv-data/sel/store/', get_data_as_csv_store),
+    path('user-status/', UserStatusView.as_view(), name='user-status'),
+    path('accounts/profile/', RedirectView.as_view(url='http://localhost')),
+    path('admin/', RedirectView.as_view(url='http://localhost')),
 ]
