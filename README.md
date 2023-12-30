@@ -6,7 +6,7 @@
 ## Description
 This is backend part of YaTёrochka project. It's a web application written as a course work for the 3rd year of study at the university. 
 
-The project is a web application for a fictional company that sells random goods. The application allows you to view the catalog of goods, view the history of orders, and also allows you to log in to your Admin account. The application is written using the React library.
+The project is a web application for a fictional company that sells random goods. The application allows you to view the catalog of goods, view the history of orders, and also allows you to log in to your Admin account.
 
 Backend written in Django framework.
 
